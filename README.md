@@ -101,7 +101,7 @@ We provide a pre-trained model. The training commands are as follows:
 python train.py --model-name pre_train_model
 ```
 
-You can download it by clicking this [link](https://drive.google.com/file/d/1qTkiMAyv6ZEfFGjfyN1xKXGOsSMcqt-L/view?usp=sharing), which should download a `pre_train_model.npz` file. You can use this model in conjunction with the predict.py script.
+You can download it by clicking this [link](https://drive.google.com/file/d/1qTkiMAyv6ZEfFGjfyN1xKXGOsSMcqt-L/view?usp=sharing), which should download a `pre_train_model.npz` file. You can use this model in conjunction with the `predict.py` script.
 
 For the train history of this model, click this [link](https://drive.google.com/file/d/1jQevvDM_goYX8iKk2AqWYM5XJcMEeuSU/view?usp=sharing)
 
