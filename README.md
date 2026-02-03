@@ -89,11 +89,23 @@ pip install numpy pandas matplotlib
 
 ### Obtaining MNIST Data
 
-You can download pre-formatted MNIST CSV files from:[Kaggle MNIST Dataset](https://www.kaggle.com/datasets/oddrationale/mnist-in-csv)
+You can download pre-formatted MNIST CSV files from:[Kaggle MNIST Dataset](https://www.kaggle.com/datasets/oddrationale/mnist-in-csv), or our google-drive [link](https://drive.google.com/file/d/1CQlq1BwaSJzXFdFafM-gVlOQLYMrIIxx/view?usp=sharing).
 
 ## Usage Guide
 
-### 1. Training the Model
+### 1. Obtaining pre-trained model
+
+We provide a pre-trained model. The training commands are as follows:
+
+```
+python train.py --model-name pre_train_model
+```
+
+You can download it by clicking this [link](https://drive.google.com/file/d/1qTkiMAyv6ZEfFGjfyN1xKXGOsSMcqt-L/view?usp=sharing), which should download a `pre_train_model.npz` file. You can use this model in conjunction with the predict.py script.
+
+For the train history of this model, click this [link](https://drive.google.com/file/d/1jQevvDM_goYX8iKk2AqWYM5XJcMEeuSU/view?usp=sharing)
+
+### 2. Training the Model
 
 The training script offers extensive customization options for hyperparameters and training configuration.
 
@@ -101,7 +113,7 @@ The training script offers extensive customization options for hyperparameters a
 
 ```
 cd scripts
-python train.py --model-name my_first_model --epochs 50 --batch-size 32 --learning-rate 0.01
+python train.py --model-name my_model --epochs 50 --batch-size 32 --learning-rate 0.01
 ```
 
 **Complete Training Example with All Options:**
@@ -153,7 +165,7 @@ Training progress with loss/accuracy metrics per epoch...
 Test data acc: 97.50%
 ```
 
-### 2. Making Predictions
+### 3. Making Predictions
 
 Use trained models to predict digits on new data.
 
@@ -197,7 +209,7 @@ Sample      2: Predicted=2, True=Yes
 ...
 ```
 
-### 3. Visualizing Training Progress
+### 4. Visualizing Training Progress
 
 Generate plots to analyze model training performance.
 
