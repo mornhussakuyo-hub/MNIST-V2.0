@@ -37,8 +37,8 @@ This project implements a two-layer neural network for handwritten digit recogni
 ### 1. Clone the Repository
 
 ```
-git clone https://github.com/your-username/mnist_project.git
-cd mnist_project
+git clone git@github.com:mornhussakuyo-hub/MNIST-V2.0.git
+cd MNIST-V2.0
 ```
 
 ### 2. Set Up Conda Environment
