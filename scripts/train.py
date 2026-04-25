@@ -1,8 +1,41 @@
 import argparse
-import numpy as np
-import sys
 import os
+import sys
 from pathlib import Path
+
+THREAD_ENV_VARS = (
+    "OMP_NUM_THREADS",
+    "OPENBLAS_NUM_THREADS",
+    "MKL_NUM_THREADS",
+    "VECLIB_MAXIMUM_THREADS",
+    "NUMEXPR_NUM_THREADS",
+)
+
+
+def configure_numpy_threads():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--num-threads", type=int, default=None)
+    known_args, _ = parser.parse_known_args()
+
+    if known_args.num_threads is not None:
+        if known_args.num_threads < 1:
+            parser.error("--num-threads must be a positive integer")
+        for env_var in THREAD_ENV_VARS:
+            os.environ[env_var] = str(known_args.num_threads)
+        return known_args.num_threads
+
+    if any(os.environ.get(env_var) for env_var in THREAD_ENV_VARS):
+        return None
+
+    num_threads = max(1, os.cpu_count() or 1)
+    for env_var in THREAD_ENV_VARS:
+        os.environ[env_var] = str(num_threads)
+    return num_threads
+
+
+CONFIGURED_NUM_THREADS = configure_numpy_threads()
+
+import numpy as np
 
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +60,7 @@ def parse_args():
     parser.add_argument("--val-ratio",type=float,default=0.2,help="Proportion for valid-set (default: 0.2)")
     parser.add_argument("--usage-ratio",type=float,default=1.0,help="Proportion used for the training-set (default: 1.0)")
     parser.add_argument("--reg-rate",type=float,default=0.0,help="Regularization rate (default: 0.0)")
+    parser.add_argument("--num-threads",type=int,default=CONFIGURED_NUM_THREADS,help="CPU threads used by NumPy/BLAS matrix operations (default: CPU core count, unless already set by environment)")
     parser.add_argument("--no-save", action="store_true",help="Not to save model")
     return parser.parse_args()
 
@@ -50,6 +84,7 @@ def main():
     print(f"Hypermarameter: LR={learning_rate}, Epochs={num_epochs}, Batch={batch_size}")
     print(f"Learning rate decrease was {learning_rate_decrease}.")
     print(f"Regularization rate was {reg_rate}.")
+    print(f"NumPy/BLAS thread setting: {args.num_threads if args.num_threads is not None else 'environment default'}")
 
     print("\nStart loading data.")
 

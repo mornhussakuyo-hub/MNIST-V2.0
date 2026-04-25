@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MNIST 手写数字识别</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <h1>画一个数字，让神经网络来猜</h1>
+        <div class="model-card" id="modelInfo" hidden></div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel draw-panel">
+          <div class="panel-head">
+            <div>
+              <p class="label">绘图区</p>
+              <h2>28 x 28 网格</h2>
+            </div>
+            <button id="clearButton" class="ghost-button" type="button">清空</button>
+          </div>
+          <div id="grid" class="digit-grid" aria-label="手写数字绘图区"></div>
+          <p class="hint">按住鼠标左键绘制白色笔迹。</p>
+        </div>
+
+        <div class="panel result-panel">
+          <div class="panel-head">
+            <div>
+              <p class="label">识别结果</p>
+              <h2 id="resultTitle">等待输入数字</h2>
+            </div>
+            <button id="predictButton" class="primary-button" type="button">开始预测</button>
+          </div>
+
+          <div class="winner">
+            <span class="winner-label">最终结果</span>
+            <strong id="winnerDigit">?</strong>
+            <span id="winnerConfidence">置信度将在下面显示</span>
+          </div>
+
+          <div id="bars" class="bars" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

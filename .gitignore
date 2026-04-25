@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+data/*.csv
+data/*.zip
+models/*.npz
+results/*.npz
+predicts/*.out
+visualize/*/
