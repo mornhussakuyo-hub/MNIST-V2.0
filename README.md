@@ -58,6 +58,15 @@ python train.py --model-name mlp_demo --epochs 50 --batch-size 32
 python train_cnn.py --model-name cnn_demo --epochs 3 --batch-size 64
 ```
 
+GPU 训练 CNN：
+
+```bash
+pip install cupy-cuda12x
+python train_cnn_gpu.py --model-name cnn_gpu_demo --gpu 0 --epochs 10 --batch-size 256
+```
+
+如果本机是 CUDA 11，把 `cupy-cuda12x` 换成 `cupy-cuda11x`。常用参数包括 `--gpu`、`--epochs`、`--batch-size`、`--learning-rate`、`--conv1-filters`、`--conv2-filters`。
+
 预测：
 
 ```bash
