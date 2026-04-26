@@ -88,6 +88,6 @@ python scripts/web_app.py --port 8000
 
 然后打开 `http://127.0.0.1:8000`。
 
-## Git 说明
+## 许可证
 
-`.venv/`、数据集、模型文件和训练输出均已加入 `.gitignore`，仓库只保留源码、前端和环境配置。
+本项目使用 MIT License，详见 `LICENSE`。
