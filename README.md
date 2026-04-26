@@ -30,7 +30,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-GPU 训练脚本需要另外安装与本机 CUDA 匹配的 CuPy，见 `environment.requirements`。
+GPU 训练脚本需要另外安装与本机 CUDA 匹配的 CuPy，例如 `cupy-cuda11x` 或 `cupy-cuda12x`。
 
 ## 数据
 
