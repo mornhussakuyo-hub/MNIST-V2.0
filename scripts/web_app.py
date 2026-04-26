@@ -1,11 +1,15 @@
 import argparse
 import json
 import os
+import sys
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
 import numpy as np
+
+sys.path.append(str(Path(__file__).resolve().parent))
+from cnn_model import TwoConvNet
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +22,8 @@ class ModelStore:
         self.models_dir = Path(models_dir).resolve()
         self.model_path = None
         self.model_mtime = None
+        self.model_type = "mlp"
+        self.cnn_model = None
         self.weights = None
         self.model_name = ""
 
@@ -37,14 +43,23 @@ class ModelStore:
             return
 
         data = np.load(latest_path)
-        self.weights = {
-            "W1": data["W1"],
-            "b1": data["b1"],
-            "W2": data["W2"],
-            "b2": data["b2"],
-        }
+        raw_type = data["model_type"] if "model_type" in data else "mlp"
+        self.model_type = str(raw_type.item() if hasattr(raw_type, "item") else raw_type)
         raw_name = data["model_name"] if "model_name" in data else latest_path.stem
         self.model_name = str(raw_name.item() if hasattr(raw_name, "item") else raw_name)
+
+        if self.model_type == "cnn" or "conv1_W" in data:
+            self.model_type = "cnn"
+            self.cnn_model = TwoConvNet.load(latest_path)
+            self.weights = None
+        else:
+            self.cnn_model = None
+            self.weights = {
+                "W1": data["W1"],
+                "b1": data["b1"],
+                "W2": data["W2"],
+                "b2": data["b2"],
+            }
         self.model_path = latest_path
         self.model_mtime = latest_mtime
 
@@ -53,7 +68,9 @@ class ModelStore:
         return {
             "modelName": self.model_name,
             "modelPath": str(self.model_path.relative_to(PROJECT_ROOT)),
-            "hiddenSize": int(self.weights["W1"].shape[0]),
+            "modelType": self.model_type,
+            "hiddenSize": int(self.weights["W1"].shape[0]) if self.weights else None,
+            "architecture": self.architecture(),
         }
 
     def predict(self, pixels):
@@ -61,10 +78,13 @@ class ModelStore:
         x = np.asarray(pixels, dtype=np.float64).reshape(1, 784)
         x = np.clip(x, 0.0, 1.0)
 
-        z1 = x @ self.weights["W1"].T + self.weights["b1"]
-        a1 = np.maximum(0, z1)
-        z2 = a1 @ self.weights["W2"].T + self.weights["b2"]
-        probabilities = softmax(z2)[0]
+        if self.model_type == "cnn":
+            probabilities = self.cnn_model.predict_proba(x.astype(np.float32).reshape(1, 1, 28, 28))[0]
+        else:
+            z1 = x @ self.weights["W1"].T + self.weights["b1"]
+            a1 = np.maximum(0, z1)
+            z2 = a1 @ self.weights["W2"].T + self.weights["b2"]
+            probabilities = softmax(z2)[0]
         prediction = int(np.argmax(probabilities))
 
         return {
@@ -73,6 +93,16 @@ class ModelStore:
             "probabilities": [float(value) for value in probabilities],
             **self.info(),
         }
+
+    def architecture(self):
+        if self.model_type == "cnn" and self.cnn_model is not None:
+            return (
+                f"Conv({self.cnn_model.conv1.W.shape[0]}) -> Pool -> "
+                f"Conv({self.cnn_model.conv2.W.shape[0]}) -> Pool -> FC(10)"
+            )
+        if self.weights:
+            return f"784 -> {self.weights['W1'].shape[0]} -> 10"
+        return "unknown"
 
 
 def softmax(x):
