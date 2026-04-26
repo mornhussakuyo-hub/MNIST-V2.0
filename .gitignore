@@ -1,10 +1,23 @@
-.venv/
+# Python
 __pycache__/
 *.py[cod]
+*.pyo
 
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local data and generated artifacts
 data/*.csv
 data/*.zip
 models/*.npz
 results/*.npz
 predicts/*.out
 visualize/*/
+
+# Local/editor files
+.env
+.DS_Store
+.idea/
+.vscode/

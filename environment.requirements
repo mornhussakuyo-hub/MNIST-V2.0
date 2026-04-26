@@ -1,0 +1,10 @@
+Python: >=3.8,<3.12
+
+Core:
+- numpy>=1.24,<2.0
+- pandas>=2.0,<2.2
+- matplotlib>=3.7,<3.9
+- pillow>=10.0,<11.0
+
+Optional GPU:
+- cupy-cuda11x or cupy-cuda12x, choose the package that matches the local CUDA version.
