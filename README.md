@@ -79,6 +79,12 @@ python predict.py --data ../data/mnist_test.csv --model ../models/mlp_demo.npz
 python visualize.py --hist ../results/mlp_demo_training_history.npz
 ```
 
+CNN 训练结束会自动在 `visualize/` 下生成训练曲线，也可以单独可视化 CNN 训练记录：
+
+```bash
+python visualize_cnn.py --hist ../results/cnn_demo_cnn_training_history.npz
+```
+
 启动手写预测页面：
 
 ```bash

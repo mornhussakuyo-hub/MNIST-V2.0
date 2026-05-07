@@ -42,6 +42,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from cnn_model import TwoConvNet
 from common import safe_path_resolution, validate_file_path
 from utils import load_data, normalize_data, one_hot_encode, split_train_val
+from visualize_cnn import save_cnn_visualizations
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -183,6 +184,11 @@ def main():
         val_acc=val_acc_history,
     )
     print(f"Training history has been saved at: {results_path}")
+
+    print("\nGenerating CNN training visualizations...")
+    visualization_paths = save_cnn_visualizations(results_path, PROJECT_ROOT / "visualize", args.model_name)
+    for label, path in visualization_paths.items():
+        print(f"{label.capitalize()} visualization saved to: {path}")
 
     model_path = models_dir / f"{args.model_name}.npz"
     model.save(model_path)

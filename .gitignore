@@ -15,6 +15,7 @@ models/*.npz
 results/*.npz
 predicts/*.out
 visualize/*/
+media/
 
 # Local/editor files
 .env
